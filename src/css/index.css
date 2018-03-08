@@ -1,0 +1,252 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  background-color: #E6E6E6;
+}
+
+button {
+  cursor: pointer;
+}
+
+.notification {
+  position: fixed;
+  top: 40%;
+  left: 0;
+  right: 0;
+  display: none;
+  padding: 1rem 1.5rem;
+  text-align: left;
+}
+.notification.visible {
+  display: block;
+  z-index: 200;
+}
+
+.notification.visible.success {
+  background-color: #044561;
+  color: white;
+}
+.notification.visible.warning {
+  background-color: orange;
+  color: white;
+}
+.notification.visible.error {
+  background-color: #cc0000;
+  color: white;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  background-color: #197197;
+  z-index: 100;
+}
+
+header ul, footer ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+header li {
+  display: inline-block;
+  padding: 1.5rem 1rem;
+}
+header li:not(:last-child) {
+  margin-right: 1rem;
+}
+header li:hover, header li[active="true"] {
+  background-color: #589BB8;
+}
+header li.user {
+  color: #E6E6E6;
+  background-repeat: no-repeat;
+  background-position: 10% 50%;
+  padding-left: 45px;
+}
+header li.user:hover {
+  background-color: transparent;
+}
+
+header li a {
+  cursor: pointer;
+  color: #E6E6E6;
+  text-decoration: none;
+  padding: 1.5rem 1rem;
+}
+
+header li.loggedOut {
+  color: #E6E6E6;
+}
+header li.loggedOut:hover {
+  background-color: transparent;
+}
+
+#app {
+  margin: 7rem 0 3rem 0;
+  padding: 0 2.5rem;
+}
+
+#app .month {
+  border: 1px solid #044561;
+}
+
+#app .month div.monthNavigation,
+#app .month div.monthActions {
+  position: relative;
+  padding: 1rem;
+}
+
+#app .month div.monthNavigation .prev,
+#app .month div.monthNavigation .next {
+  position: absolute;
+  top: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+#app .month div.monthNavigation .prev {
+  left: 0.5rem;
+}
+
+#app .month div.monthNavigation .next {
+  right: 0.5rem;
+}
+
+#app .month div.monthNavigation .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #044561;
+  text-align: center;
+  width: 100%;
+}
+
+#app .month div.monthActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#app .month div.monthActions button {
+  padding: 0.7rem 1.7rem;
+  color: #E6E6E6;
+}
+#app .month div.monthActions button.saveChanges {
+  background-color: #044561;
+}
+#app .month div.monthActions button.secondary {
+  background-color: #197197;
+}
+#app .month div.monthActions button:not(:first-child) {
+  margin-left: 1.5rem;
+}
+#app .month div.monthActions button.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#app .month .day {
+  box-sizing: border-box;
+  display: inline-block;
+  width: calc(100% / 7);
+  padding: 1.2rem 1.5rem 1.8rem 1.5rem;
+  text-align: center;
+}
+
+#app .month .day.current {
+  box-shadow: inset 1px 1px 5px #589BB8;
+}
+#app .month .day.approved {
+  background: no-repeat bottom;
+}
+#app .month .day.hidden {
+  opacity: 0.2;
+}
+
+#app .month .day.numbered:hover {
+  background-color: #589BB8;
+  color: white;
+}
+#app .month .day.numbered > span {
+  font-weight: bold;
+}
+
+#app .month .day.numbered .dayDetails {
+  display: none;
+}
+#app .month .day.numbered .dayDetails input {
+  width: 90%;
+  margin-left: -0.7rem;
+  text-align: center;
+}
+#app .month .day.numbered .dayDetails {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.7rem;
+}
+
+#app input {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #197197;
+  display: block;
+}
+#app form.login {
+  width: 75%;
+  margin: 0 auto;
+}
+#app form.login input:not([type=submit]) {
+  width: calc(100% - (1.6rem + 2px));
+}
+#app form.login div:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+#app form.login .error input {
+  border: 1px solid #cc0000;
+  background-image: url(data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22#cc0000%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20class%3D%22feather%20feather-alert-circle%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2210%22%3E%3C%2Fcircle%3E%3Cline%20x1%3D%2212%22%20y1%3D%228%22%20x2%3D%2212%22%20y2%3D%2212%22%3E%3C%2Fline%3E%3Cline%20x1%3D%2212%22%20y1%3D%2216%22%20x2%3D%2212%22%20y2%3D%2216%22%3E%3C%2Fline%3E%3C%2Fsvg%3E);
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#app input[type=submit] {
+  padding: 1rem 2rem;
+  width: 100%;
+  background-color: #044561;
+  color: #E6E6E6;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #044561;
+  border-top: 1px solid #044561;
+  padding: 1.5rem;
+}
+
+@media (max-width: 750px) {
+  header ul {
+    white-space: nowrap;
+  }
+
+  #app .month {
+    min-width: 750px;
+    max-width: 750px;
+  }
+}
+/*
+
+light   589BB8
+medium  197197
+dark    044561
+
+*/

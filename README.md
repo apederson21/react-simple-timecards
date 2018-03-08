@@ -28,3 +28,5 @@ This is a WIP to explore React. I've created a couple components here to get fam
     * Notice your session storage contains the timecard data
 
 ### TBD
+ * Approved Hours
+ * Submitted Hours

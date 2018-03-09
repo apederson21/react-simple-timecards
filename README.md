@@ -21,10 +21,12 @@ This is a WIP to explore React. I've created a couple components here to get fam
    * This component allows users to save hours (via session storage)
 
 ### Test the App
- 1. Run `npm start` (your browser should open automatically)
- 2. Login with "valid" credentials, i.e. `user` `password`
+ 1. Install the latest version of [Node](https://nodejs.org)
+ 2. Clone the repo and run `npm install`
+ 3. Run `npm start` (your browser should open automatically)
+ 4. Login with "valid" credentials, i.e. `user` `password`
     * Notice two "simpleCard" cookies were created
- 3. Add hours to any day(s) and click Save.
+ 5. Add hours to any day(s) and click Save.
     * Notice your session storage contains the timecard data
 
 ### TBD

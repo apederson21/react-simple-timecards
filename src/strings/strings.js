@@ -1,9 +1,10 @@
 export const appStrings = {
     buttons: {
+        resetSelection: 'Reset Selections',
         saveChanges: 'Save Changes',
-        showSubmitted: 'Show Submitted',
         showApproved: 'Show Approved',
-        resetSelection: 'Reset Selections'
+        showSubmitted: 'Show Submitted',
+        submitHours: 'Submit Hours'
     },
     common: {
         hours: 'Hours'
@@ -13,6 +14,15 @@ export const appStrings = {
         loginValue: 'username or email',
         password: 'password (6 or more characters)',
         submit: 'Login'
+    },
+    messages: {
+        success: {
+            save: 'Changes saved!',
+            submitted: 'Hours Submitted!'
+        },
+        error: {
+            generic: 'An error occurred: '
+        }
     },
     timecards: {
         heading: 'Select a day to add hours to. Submitted and approved hours cannot be edited.',

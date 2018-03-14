@@ -2,7 +2,7 @@ import React from 'react';
 import '../../css/index.css';
 import { createSVGBackground, notificationHandler } from '../../utils/utils';
 import { appStrings } from '../../strings/strings';
-import { storeTimecardData } from '../../session/session';
+import { storeTimecardData, submitTimecardData } from '../../session/session';
   
 /**
  * @description Renders a calendar month
@@ -53,6 +53,11 @@ class Month extends React.Component {
             let form = document.getElementById('monthDays');
             form.reset();
         }
+
+        if (!!resetItems.submitElem) {
+            let submitElem = document.getElementsByClassName('submitHours');
+            submitElem[0].classList.remove('unavailable');
+        }
     }
 
     /** Validate input is a number
@@ -92,16 +97,18 @@ class Month extends React.Component {
 
         // if user has made hours changes
         if (this.state.userHours && Object.keys(this.state.userHours).length > 0) {
-            // add `unavailable` class to save buttons
-            
-                saveElem[0].classList.add('unavailable');
+            // add `unavailable` class to save button
+            saveElem[0].classList.add('unavailable');
 
             storeTimecardData(this.props.y, this.props.m, this.state.userHours)
                 .then(() => {
-                    notificationHandler('success', 2000, 'Changes saved!');
+                    notificationHandler('success', 2000, appStrings.messages.success.save);
+                    /*
+                    TODO: Add attr or class to submitted days
+                    */
                 })
                 .catch((err) => {
-                    notificationHandler('error', 5000, `An error occurred: ${err}`);
+                    notificationHandler('error', 5000, `${appStrings.messages.error.generic} ${err}`);
                 })
                 .finally(() => {
                     // reset the save button
@@ -112,6 +119,33 @@ class Month extends React.Component {
         }
     }
 
+    submitHours() {
+        let submitElem = document.getElementsByClassName('submitHours');
+        
+        if (submitElem[0].classList.contains('unavailable')) return;
+
+        // if user has made hours changes
+        if (this.state.userHours && Object.keys(this.state.userHours).length > 0) {
+            // add `unavailable` class to submit button
+            submitElem[0].classList.add('unavailable');
+
+            submitTimecardData(this.props.y, this.props.m, this.state.userHours)
+                .then(() => {
+                    notificationHandler('success', 2000, appStrings.messages.success.submitted);
+                })
+                .catch((err) => {
+                    notificationHandler('error', 5000, `${appStrings.messages.error.generic} ${err}`);
+                })
+                .finally(() => {
+                    // reset the submit button
+                    this.resetForm({
+                        submitElem: true
+                    });
+                });
+        }
+    }
+
+    // TODO: will these 3 methods be used?
     showSubmitted() {
         document.querySelectorAll('.day.numbered:not(.submitted)').forEach((node) => {
             node.classList.add('hidden');
@@ -221,14 +255,14 @@ class Month extends React.Component {
                         className='saveChanges'
                         onClick={() => this.saveChanges()}>{ appStrings.buttons.saveChanges }</button>
                     <button
-                        className='secondary'
-                        onClick={() => this.showSubmitted()}>{ appStrings.buttons.showSubmitted }</button>
-                    <button
+                        className='secondary submitHours'
+                        onClick={() => this.submitHours()}>{ appStrings.buttons.submitHours }</button>
+                    {/* <button
                         className='secondary'
                         onClick={() => this.showApproved()}>{ appStrings.buttons.showApproved }</button>
                     <button
                         className='secondary'
-                        onClick={() => this.resetSelection()}>{ appStrings.buttons.resetSelection }</button>
+                        onClick={() => this.resetSelection()}>{ appStrings.buttons.resetSelection }</button> */}
                 </div>
             </div>
         );

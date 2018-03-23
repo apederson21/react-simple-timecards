@@ -29,6 +29,7 @@ class Timecards extends React.Component {
         this.state = Object.assign(monthBasics, monthData, {
             hoursLogged: monthsTimecardData.hoursLogged,
             hoursApproved: monthsTimecardData.hoursApproved,
+            hoursSubmitted: monthsTimecardData.hoursSubmitted,
             current: `${monthBasics.m}-${d.getDate()}-${monthBasics.y}`
         });
     }
@@ -52,6 +53,7 @@ class Timecards extends React.Component {
         let monthsTimecardData = getTimecardData(targetState.y, targetState.m);
         targetState.hoursLogged = monthsTimecardData.hoursLogged;
         targetState.hoursApproved = monthsTimecardData.hoursApproved;
+        targetState.hoursSubmitted = monthsTimecardData.hoursSubmitted;
 
         Object.assign(targetState, genMonthData(
             targetState.m, targetState.y
@@ -83,6 +85,7 @@ class Timecards extends React.Component {
                             y={this.state.y}
                             hoursLogged={this.state.hoursLogged}
                             hoursApproved={this.state.hoursApproved}
+                            hoursSubmitted={this.state.hoursSubmitted}
                             mName={this.state.mName}
                             numDays={this.state.numDays}
                             nextM={this.state.nextM}

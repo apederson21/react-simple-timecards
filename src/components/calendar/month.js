@@ -2,7 +2,7 @@ import React from 'react';
 import '../../css/index.css';
 import { createSVGBackground, notificationHandler } from '../../utils/utils';
 import { appStrings } from '../../strings/strings';
-import { storeTimecardData, submitTimecardData } from '../../session/session';
+import { getTimecardData, storeTimecardData, submitTimecardData } from '../../session/session';
   
 /**
  * @description Renders a calendar month
@@ -13,7 +13,8 @@ class Month extends React.Component {
 
         // create state
         this.state = {
-            userHours: {}
+            userHours: {},
+            hoursSubmitted: props.hoursSubmitted || {}
         };
     }
 
@@ -29,10 +30,12 @@ class Month extends React.Component {
         // reset the save button and form
         this.resetForm({
             saveButton: true,
-            formInputs: true
+            formInputs: true,
+            submitted: true
         });
         this.setState({
-            userHours: {}
+            userHours: {},
+            hoursSubmitted: nextProps.hoursSubmitted || {}
         });
     }
 
@@ -54,9 +57,31 @@ class Month extends React.Component {
             form.reset();
         }
 
+        if (!!resetItems.submitted) {
+            let submittedItems = document.querySelectorAll( 'div.day.submitted');
+            for (var item of submittedItems) {
+                item.classList.remove('submitted');
+            }
+        }
+
         if (!!resetItems.submitElem) {
             let submitElem = document.getElementsByClassName('submitHours');
             submitElem[0].classList.remove('unavailable');
+        }
+    }
+
+    /** Replace placeholder value in hours input with actual value
+     * @param event
+     */
+    replaceValue (event) {
+        let day = event.target.id;
+        if (!event.target.value) {
+            let targetVal = this.props.hoursApproved[day]
+                            || 
+                            (!!this.props.hoursSubmitted && this.props.hoursSubmitted[day]) ?
+                                this.props.hoursSubmitted[day] : 
+                                    (!!this.props.hoursLogged && this.props.hoursLogged[day] ? this.props.hoursLogged[day] : 0);
+            document.querySelector(`input[id="${day}"]`).value = targetVal;
         }
     }
 
@@ -132,6 +157,7 @@ class Month extends React.Component {
             submitTimecardData(this.props.y, this.props.m, this.state.userHours)
                 .then(() => {
                     notificationHandler('success', 2000, appStrings.messages.success.submitted);
+                    this.loadSubmittedHours();
                 })
                 .catch((err) => {
                     notificationHandler('error', 5000, `${appStrings.messages.error.generic} ${err}`);
@@ -144,6 +170,16 @@ class Month extends React.Component {
                 });
         }
     }
+
+    // Load the submitted hours from session storage
+    loadSubmittedHours() {
+        let timeCardData = getTimecardData(this.props.y, this.props.m);
+        let submittedHours = timeCardData.hoursSubmitted;
+        
+        this.setState({
+            hoursSubmitted: submittedHours
+        });
+    } 
 
     // TODO: will these 3 methods be used?
     showSubmitted() {
@@ -198,21 +234,34 @@ class Month extends React.Component {
             let dayGroup = groups[groupIndex];
 
             // populate input value from hours logged
-            let hoursLogged = (!!this.props.hoursLogged && this.props.hoursLogged[x] >= 0) ?
-                                this.props.hoursLogged[x] : 0;
+            let hoursLogged;
+            if (!!this.props.hoursSubmitted && this.props.hoursSubmitted[x]) {
+                hoursLogged = this.props.hoursSubmitted[x];
+            } else {
+                if (!!this.props.hoursLogged && this.props.hoursLogged[x]) {
+                    hoursLogged = this.props.hoursLogged[x];
+                } else {
+                    hoursLogged = 0;
+                }
+            }
 
             // are hours approved?
             let hoursApproved = !!this.props.hoursApproved[x];
             
-            // TODO
             // are hours submitted?
-            let hoursSubmitted = false;
+            let hoursSubmitted = (!!this.props.hoursSubmitted && this.props.hoursSubmitted[x]) ? this.props.hoursSubmitted[x] 
+                                    : (
+                                        (!!this.state.hoursSubmitted && this.state.hoursSubmitted[x]) ? this.state.hoursSubmitted[x] : false
+                                    );
 
             // add `current` class to current day
             let currentDayClass = (`${this.props.m}-${x}-${this.props.y}` === this.props.current) ? 'current' : '';
 
             // add `approved` class to day with approved hours
             let approvedDayClass = (!!this.props.hoursApproved[x]) ? 'approved' : ''
+
+            // add `submitted` class to day with submitted hours
+            let submittedDayClass = (hoursSubmitted && !approvedDayClass) ? 'submitted' : '';
 
             let hoursDisplay = 
                 (approvedDayClass) ? 
@@ -223,10 +272,11 @@ class Month extends React.Component {
                         pattern='^\d+(\.\d{0,2})?$'
                         maxLength='4'
                         placeholder={hoursLogged}
+                        onFocus={this.replaceValue.bind(this)}
                         { ...(hoursApproved ? {className: 'approved'} : {}) }
                         onChange={this.handleChangeHours.bind(this)} />
             daysBody.push(
-                <div className={`day numbered ${dayGroup} ${currentDayClass} ${approvedDayClass}`}
+                <div className={`day numbered ${dayGroup} ${currentDayClass} ${approvedDayClass} ${submittedDayClass}`}
                      style={{backgroundImage: (approvedDayClass) ? createSVGBackground('check') : ''}}
                      key={x}>
                     <span>{x}</span>

@@ -128,9 +128,6 @@ class Month extends React.Component {
             storeTimecardData(this.props.y, this.props.m, this.state.userHours)
                 .then(() => {
                     notificationHandler('success', 2000, appStrings.messages.success.save);
-                    /*
-                    TODO: Add attr or class to submitted days
-                    */
                 })
                 .catch((err) => {
                     notificationHandler('error', 5000, `${appStrings.messages.error.generic} ${err}`);
@@ -178,29 +175,6 @@ class Month extends React.Component {
         
         this.setState({
             hoursSubmitted: submittedHours
-        });
-    } 
-
-    // TODO: will these 3 methods be used?
-    showSubmitted() {
-        document.querySelectorAll('.day.numbered:not(.submitted)').forEach((node) => {
-            node.classList.add('hidden');
-        });
-        document.querySelectorAll('.day.numbered.submitted').forEach((node) => {
-            node.classList.remove('hidden');
-        });
-    }
-    showApproved() {
-        document.querySelectorAll('.day.numbered:not(.approved)').forEach((node) => {
-            node.classList.add('hidden');
-        });
-        document.querySelectorAll('.day.numbered.approved').forEach((node) => {
-            node.classList.remove('hidden');
-        });
-    }
-    resetSelection() {
-        document.querySelectorAll('.day.numbered').forEach((node) => {
-            node.classList.remove('hidden');
         });
     }
 
@@ -307,12 +281,6 @@ class Month extends React.Component {
                     <button
                         className='secondary submitHours'
                         onClick={() => this.submitHours()}>{ appStrings.buttons.submitHours }</button>
-                    {/* <button
-                        className='secondary'
-                        onClick={() => this.showApproved()}>{ appStrings.buttons.showApproved }</button>
-                    <button
-                        className='secondary'
-                        onClick={() => this.resetSelection()}>{ appStrings.buttons.resetSelection }</button> */}
                 </div>
             </div>
         );

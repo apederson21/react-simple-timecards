@@ -166,6 +166,12 @@ header li.loggedOut:hover {
 #app .month .day.approved {
   background: no-repeat bottom;
 }
+#app .month .day.submitted {
+  opacity: 0.5;
+}
+#app .month .day.submitted input {
+  pointer-events: none;
+}
 #app .month .day.hidden {
   opacity: 0.2;
 }
